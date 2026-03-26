@@ -12,22 +12,108 @@ const EMPTY_ADDRESS = {
   addressLine2: '',
   city: '',
   state: '',
-  pincode: '',
+  zipCode: '',
 };
 
-const INDIAN_STATES = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
-  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
-  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-  'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu',
-  'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry',
+const US_STATES = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+  'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+  'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+  'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri',
+  'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+  'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+  'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+  'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming',
+  'District of Columbia',
 ];
 
-const SHIPPING_COST = 99;
-const FREE_SHIPPING_THRESHOLD = 2000;
+const SHIPPING_COST = 9.99;
+const FREE_SHIPPING_THRESHOLD = 150;
+
+const AddressForm = ({ address, onChange }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-sm font-medium text-pottery-700 mb-1">Full Name *</label>
+      <input type="text" className="input" value={address.fullName}
+        onChange={e => onChange({ ...address, fullName: e.target.value })}
+        placeholder="Full name" />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-pottery-700 mb-1">Phone *</label>
+      <input type="tel" className="input" value={address.phone}
+        onChange={e => onChange({ ...address, phone: e.target.value })}
+        placeholder="10-digit phone number" />
+    </div>
+    <div className="md:col-span-2">
+      <label className="block text-sm font-medium text-pottery-700 mb-1">Address Line 1 *</label>
+      <input type="text" className="input" value={address.addressLine1}
+        onChange={e => onChange({ ...address, addressLine1: e.target.value })}
+        placeholder="Street address" />
+    </div>
+    <div className="md:col-span-2">
+      <label className="block text-sm font-medium text-pottery-700 mb-1">Address Line 2</label>
+      <input type="text" className="input" value={address.addressLine2 || ''}
+        onChange={e => onChange({ ...address, addressLine2: e.target.value })}
+        placeholder="Apt, suite, unit (optional)" />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-pottery-700 mb-1">City *</label>
+      <input type="text" className="input" value={address.city}
+        onChange={e => onChange({ ...address, city: e.target.value })}
+        placeholder="City" />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-pottery-700 mb-1">State *</label>
+      <select className="input" value={address.state}
+        onChange={e => onChange({ ...address, state: e.target.value })}>
+        <option value="">Select state</option>
+        {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+      </select>
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-pottery-700 mb-1">ZIP Code *</label>
+      <input type="text" className="input" value={address.zipCode}
+        onChange={e => onChange({ ...address, zipCode: e.target.value.replace(/[^\d-]/g, '').slice(0, 10) })}
+        placeholder="ZIP code" maxLength={10} />
+    </div>
+  </div>
+);
+
+const SavedAddressCard = ({ addr, selected, onSelect }) => (
+  <button onClick={onSelect}
+    className={`w-full text-left p-4 rounded-lg border-2 transition ${
+      selected ? 'border-pottery-600 bg-pottery-50' : 'border-pottery-200 hover:border-pottery-400'}`}>
+    <div className="flex items-start justify-between">
+      <div>
+        <p className="font-semibold text-pottery-800">{addr.fullName}</p>
+        <p className="text-sm text-pottery-600">{addr.phone}</p>
+        <p className="text-sm text-pottery-600 mt-1">
+          {addr.addressLine1}{addr.addressLine2 ? `, ${addr.addressLine2}` : ''}
+        </p>
+        <p className="text-sm text-pottery-600">{addr.city}, {addr.state} {addr.zipCode}</p>
+      </div>
+      {selected && (
+        <div className="bg-pottery-600 rounded-full p-1">
+          <Check size={14} className="text-white" />
+        </div>
+      )}
+    </div>
+  </button>
+);
+
+const AddressDisplay = ({ title, address }) => (
+  <div className="bg-pottery-50 p-4 rounded-lg">
+    <h4 className="font-semibold text-pottery-800 mb-2">{title}</h4>
+    <p className="text-sm text-pottery-700">{address.fullName}</p>
+    <p className="text-sm text-pottery-600">{address.phone}</p>
+    <p className="text-sm text-pottery-600">
+      {address.addressLine1}{address.addressLine2 ? `, ${address.addressLine2}` : ''}
+    </p>
+    <p className="text-sm text-pottery-600">{address.city}, {address.state} {address.zipCode}</p>
+  </div>
+);
 
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -90,15 +176,15 @@ export default function Checkout() {
   }, []);
 
   const validateAddress = (address) => {
-    const required = ['fullName', 'phone', 'addressLine1', 'city', 'state', 'pincode'];
+    const required = ['fullName', 'phone', 'addressLine1', 'city', 'state', 'zipCode'];
     for (const field of required) {
       if (!address[field]?.trim()) {
         const label = field.replace(/([A-Z])/g, ' $1').toLowerCase();
         return `Please fill in ${label}`;
       }
     }
-    if (!/^\d{6}$/.test(address.pincode)) {
-      return 'Please enter a valid 6-digit pincode';
+    if (!/^\d{5}(-\d{4})?$/.test(address.zipCode)) {
+      return 'Please enter a valid ZIP code (e.g., 78701 or 78701-1234)';
     }
     if (!/^\d{10}$/.test(address.phone.replace(/\D/g, ''))) {
       return 'Please enter a valid 10-digit phone number';
@@ -130,12 +216,16 @@ export default function Checkout() {
     setError('');
 
     try {
-      // Optionally save new addresses
-      if (saveShippingAddress && useNewShipping) {
-        await authAPI.addShippingAddress(shippingAddress);
-      }
-      if (saveBillingAddress && useNewBilling && !billingSameAsShipping) {
-        await authAPI.addBillingAddress(billingAddress);
+      // Optionally save new addresses (don't fail checkout if this errors)
+      try {
+        if (saveShippingAddress && useNewShipping) {
+          await authAPI.addShippingAddress(shippingAddress);
+        }
+        if (saveBillingAddress && useNewBilling && !billingSameAsShipping) {
+          await authAPI.addBillingAddress(billingAddress);
+        }
+      } catch (addrErr) {
+        console.warn('Failed to save address:', addrErr);
       }
 
       const finalBilling = billingSameAsShipping ? { ...shippingAddress } : billingAddress;
@@ -159,144 +249,60 @@ export default function Checkout() {
         orderData,
       });
 
-      const { order, checkoutUrl } = response.data;
+      const { order, sessionId, gatewayUrl, apiVersion, merchantName } = response.data;
 
-      if (checkoutUrl) {
-        // Hosted checkout — redirect to payment gateway
-        sessionStorage.setItem('pendingOrder', JSON.stringify({
-          orderId: order.orderId,
-          orderNumber: order.orderNumber,
-        }));
-        clearCart();
-        window.location.href = checkoutUrl;
-      } else {
-        // Fallback: Razorpay modal checkout
-        const options = {
-          key: response.data.key,
-          amount: order.amount,
-          currency: order.currency || 'INR',
-          name: 'Pottery Store',
-          description: `Order ${order.orderNumber}`,
-          order_id: order.id,
-          handler: async function (paymentResponse) {
-            try {
-              await paymentAPI.verifyPayment({
-                razorpay_order_id: paymentResponse.razorpay_order_id,
-                razorpay_payment_id: paymentResponse.razorpay_payment_id,
-                razorpay_signature: paymentResponse.razorpay_signature,
-                orderId: order.orderId,
-              });
-              clearCart();
-              navigate(`/order-success?orderId=${order.orderId}`);
-            } catch {
-              setError('Payment verification failed. Please contact support.');
-            }
-          },
-          prefill: {
-            name: shippingAddress.fullName,
-            contact: shippingAddress.phone,
-            email: user?.email || '',
-          },
-          theme: { color: '#b08968' },
-          modal: {
-            ondismiss: () => setLoading(false),
-          },
-        };
+      // Store pending order info for after payment return
+      sessionStorage.setItem('pendingOrder', JSON.stringify({
+        orderId: order.orderId,
+        orderNumber: order.orderNumber,
+      }));
 
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+      // Remove any existing Mastercard checkout script
+      const existingScript = document.getElementById('mastercard-checkout-js');
+      if (existingScript) existingScript.remove();
+
+      // Load Mastercard Hosted Checkout script
+      const script = document.createElement('script');
+      script.src = `${gatewayUrl}/checkout/version/${apiVersion}/checkout.js`;
+      script.id = 'mastercard-checkout-js';
+      script.setAttribute('data-error', 'errorCallback');
+      script.setAttribute('data-cancel', `${window.location.origin}/checkout`);
+
+      script.onload = () => {
+        // Wait for the script to fully initialize, then configure and show payment page
+        setTimeout(() => {
+          if (window.Checkout) {
+            window.Checkout.configure({
+              session: { id: sessionId },
+              interaction: {
+                merchant: {
+                  name: merchantName || 'Meenakshi Pottery',
+                },
+              },
+            });
+            // Clear cart before redirect
+            clearCart();
+            // Show the hosted payment page (redirects to Mastercard)
+            window.Checkout.showPaymentPage();
+          } else {
+            setError('Failed to load payment gateway. Please try again.');
+            setLoading(false);
+          }
+        }, 500);
+      };
+
+      script.onerror = () => {
+        setError('Failed to load payment gateway script. Please try again.');
         setLoading(false);
-        return;
-      }
+      };
+
+      document.head.appendChild(script);
     } catch (err) {
       console.error('Order creation failed:', err);
       setError(err.response?.data?.message || 'Failed to create order. Please try again.');
       setLoading(false);
     }
   };
-
-  const AddressForm = ({ address, onChange }) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label className="block text-sm font-medium text-pottery-700 mb-1">Full Name *</label>
-        <input type="text" className="input" value={address.fullName}
-          onChange={e => onChange({ ...address, fullName: e.target.value })}
-          placeholder="Full name" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-pottery-700 mb-1">Phone *</label>
-        <input type="tel" className="input" value={address.phone}
-          onChange={e => onChange({ ...address, phone: e.target.value })}
-          placeholder="10-digit phone number" />
-      </div>
-      <div className="md:col-span-2">
-        <label className="block text-sm font-medium text-pottery-700 mb-1">Address Line 1 *</label>
-        <input type="text" className="input" value={address.addressLine1}
-          onChange={e => onChange({ ...address, addressLine1: e.target.value })}
-          placeholder="House no., building, street" />
-      </div>
-      <div className="md:col-span-2">
-        <label className="block text-sm font-medium text-pottery-700 mb-1">Address Line 2</label>
-        <input type="text" className="input" value={address.addressLine2 || ''}
-          onChange={e => onChange({ ...address, addressLine2: e.target.value })}
-          placeholder="Landmark, area (optional)" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-pottery-700 mb-1">City *</label>
-        <input type="text" className="input" value={address.city}
-          onChange={e => onChange({ ...address, city: e.target.value })}
-          placeholder="City" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-pottery-700 mb-1">State *</label>
-        <select className="input" value={address.state}
-          onChange={e => onChange({ ...address, state: e.target.value })}>
-          <option value="">Select state</option>
-          {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-pottery-700 mb-1">Pincode *</label>
-        <input type="text" className="input" value={address.pincode}
-          onChange={e => onChange({ ...address, pincode: e.target.value.replace(/\D/g, '').slice(0, 6) })}
-          placeholder="6-digit pincode" maxLength={6} />
-      </div>
-    </div>
-  );
-
-  const SavedAddressCard = ({ addr, selected, onSelect }) => (
-    <button onClick={onSelect}
-      className={`w-full text-left p-4 rounded-lg border-2 transition ${
-        selected ? 'border-pottery-600 bg-pottery-50' : 'border-pottery-200 hover:border-pottery-400'}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="font-semibold text-pottery-800">{addr.fullName}</p>
-          <p className="text-sm text-pottery-600">{addr.phone}</p>
-          <p className="text-sm text-pottery-600 mt-1">
-            {addr.addressLine1}{addr.addressLine2 ? `, ${addr.addressLine2}` : ''}
-          </p>
-          <p className="text-sm text-pottery-600">{addr.city}, {addr.state} - {addr.pincode}</p>
-        </div>
-        {selected && (
-          <div className="bg-pottery-600 rounded-full p-1">
-            <Check size={14} className="text-white" />
-          </div>
-        )}
-      </div>
-    </button>
-  );
-
-  const AddressDisplay = ({ title, address }) => (
-    <div className="bg-pottery-50 p-4 rounded-lg">
-      <h4 className="font-semibold text-pottery-800 mb-2">{title}</h4>
-      <p className="text-sm text-pottery-700">{address.fullName}</p>
-      <p className="text-sm text-pottery-600">{address.phone}</p>
-      <p className="text-sm text-pottery-600">
-        {address.addressLine1}{address.addressLine2 ? `, ${address.addressLine2}` : ''}
-      </p>
-      <p className="text-sm text-pottery-600">{address.city}, {address.state} - {address.pincode}</p>
-    </div>
-  );
 
   if (cart.length === 0) {
     return (
@@ -471,7 +477,7 @@ export default function Checkout() {
                       <p className="text-sm text-pottery-600">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-pottery-800">
-                      ₹{(item.price * item.quantity).toLocaleString()}
+                      ${(item.price * item.quantity).toLocaleString()}
                     </p>
                   </div>
                 ))}
@@ -487,7 +493,7 @@ export default function Checkout() {
                   {loading ? (
                     <><Loader2 size={18} className="animate-spin" /> Processing...</>
                   ) : (
-                    <><CreditCard size={18} /> Pay ₹{orderTotal.toLocaleString()}</>
+                    <><CreditCard size={18} /> Pay ${orderTotal.toLocaleString()}</>
                   )}
                 </button>
               </div>
@@ -505,29 +511,29 @@ export default function Checkout() {
                   <span className="text-pottery-700">
                     {item.name} <span className="text-pottery-500">x{item.quantity}</span>
                   </span>
-                  <span className="text-pottery-800 font-medium">₹{(item.price * item.quantity).toLocaleString()}</span>
+                  <span className="text-pottery-800 font-medium">${(item.price * item.quantity).toLocaleString()}</span>
                 </div>
               ))}
             </div>
             <div className="border-t border-pottery-200 pt-3 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-pottery-600">Subtotal</span>
-                <span className="text-pottery-800">₹{cartTotal.toLocaleString()}</span>
+                <span className="text-pottery-800">${cartTotal.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-pottery-600">Shipping</span>
                 <span className={shippingCost === 0 ? 'text-green-600 font-medium' : 'text-pottery-800'}>
-                  {shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}
+                  {shippingCost === 0 ? 'FREE' : `$${shippingCost}`}
                 </span>
               </div>
               {shippingCost > 0 && (
                 <p className="text-xs text-pottery-500">
-                  Free shipping on orders above ₹{FREE_SHIPPING_THRESHOLD.toLocaleString()}
+                  Free shipping on orders above ${FREE_SHIPPING_THRESHOLD.toLocaleString()}
                 </p>
               )}
               <div className="border-t border-pottery-200 pt-2 flex justify-between text-lg font-bold">
                 <span className="text-pottery-800">Total</span>
-                <span className="text-pottery-800">₹{orderTotal.toLocaleString()}</span>
+                <span className="text-pottery-800">${orderTotal.toLocaleString()}</span>
               </div>
             </div>
           </div>

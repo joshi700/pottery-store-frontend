@@ -48,7 +48,7 @@ export default function Cart() {
                   <img src={item.images[0]} alt={item.name} className="w-20 h-20 object-cover rounded" />
                   <div className="flex-1">
                     <h3 className="font-semibold text-pottery-800">{item.name}</h3>
-                    <p className="text-pottery-600">₹{item.price.toLocaleString()}</p>
+                    <p className="text-pottery-600">${item.price.toLocaleString()}</p>
                     
                     <div className="flex items-center gap-2 mt-2">
                       <button onClick={() => updateQuantity(item._id, item.quantity - 1)} className="p-1 hover:bg-pottery-200 rounded">
@@ -73,7 +73,7 @@ export default function Cart() {
           <div className="p-4 border-t border-pottery-200">
             <div className="flex justify-between mb-4 text-lg font-semibold">
               <span>Total:</span>
-              <span>₹{cartTotal.toLocaleString()}</span>
+              <span>${cartTotal.toLocaleString()}</span>
             </div>
             <button onClick={handleCheckout} className="w-full btn btn-primary">
               Proceed to Checkout

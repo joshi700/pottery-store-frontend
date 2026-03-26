@@ -211,7 +211,7 @@ export default function AdminProducts() {
                     <h3 className="font-semibold text-pottery-800 line-clamp-1">{product.name}</h3>
                     <p className="text-sm text-pottery-500 capitalize">{product.category}</p>
                   </div>
-                  <p className="font-bold text-pottery-800">₹{product.price?.toLocaleString()}</p>
+                  <p className="font-bold text-pottery-800">${product.price?.toLocaleString()}</p>
                 </div>
                 <p className="text-sm text-pottery-600 line-clamp-2 mb-4">{product.description}</p>
                 <div className="flex gap-2">
@@ -276,7 +276,7 @@ export default function AdminProducts() {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-pottery-700 mb-1">Price (₹) *</label>
+                    <label className="block text-sm font-medium text-pottery-700 mb-1">Price ($) *</label>
                     <input type="number" className="input" value={form.price}
                       onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
                       placeholder="1500" min="0" />

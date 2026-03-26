@@ -87,7 +87,7 @@ export default function ProductDetail() {
             
             <div className="flex items-baseline gap-4 mb-6">
               <span className="text-3xl font-bold text-pottery-700">
-                ₹{product.price.toLocaleString()}
+                ${product.price.toLocaleString()}
               </span>
               {product.isAvailable ? (
                 <span className="text-green-600 font-semibold">In Stock ({product.quantity} available)</span>

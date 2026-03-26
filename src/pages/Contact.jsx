@@ -14,8 +14,8 @@ export default function Contact() {
             <h3 className="font-semibold text-pottery-800 mb-4">Contact Information</h3>
             <div className="space-y-2 text-pottery-700">
               <p><strong>Email:</strong> contact@potterystore.com</p>
-              <p><strong>Phone:</strong> +91 1234567890</p>
-              <p><strong>Address:</strong> 123 Pottery Lane, Art District, Mumbai, India</p>
+              <p><strong>Phone:</strong> +1 (512) 555-0178</p>
+              <p><strong>Address:</strong> 247 Artisan Way, Arts District, Austin, TX 78701, USA</p>
             </div>
           </div>
 

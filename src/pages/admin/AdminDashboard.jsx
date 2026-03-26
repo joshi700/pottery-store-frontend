@@ -58,7 +58,7 @@ export default function AdminDashboard() {
   const statCards = [
     {
       label: 'Total Revenue',
-      value: `₹${(stats?.totalRevenue || 0).toLocaleString()}`,
+      value: `$${(stats?.totalRevenue || 0).toLocaleString()}`,
       icon: DollarSign,
       color: 'bg-green-100 text-green-600',
     },
@@ -143,12 +143,12 @@ export default function AdminDashboard() {
                 return (
                   <div key={i} className="flex-1 flex flex-col items-center gap-2">
                     <span className="text-xs text-pottery-600 font-medium">
-                      ₹{(m.revenue / 1000).toFixed(1)}k
+                      ${(m.revenue / 1000).toFixed(1)}k
                     </span>
                     <div
                       className="w-full bg-pottery-600 rounded-t-md transition-all hover:bg-pottery-700"
                       style={{ height: `${height}%` }}
-                      title={`₹${m.revenue.toLocaleString()} (${m.count} orders)`}
+                      title={`$${m.revenue.toLocaleString()} (${m.count} orders)`}
                     />
                     <span className="text-xs text-pottery-500">
                       {monthNames[m._id.month]}
@@ -217,11 +217,11 @@ export default function AdminDashboard() {
                     <td className="py-3 px-2 font-medium text-pottery-800">{order.orderNumber}</td>
                     <td className="py-3 px-2 text-pottery-700">{order.user?.name || 'N/A'}</td>
                     <td className="py-3 px-2 text-pottery-600">
-                      {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                      {new Date(order.createdAt).toLocaleDateString('en-US', {
                         day: 'numeric', month: 'short'
                       })}
                     </td>
-                    <td className="py-3 px-2 font-medium text-pottery-800">₹{order.total?.toLocaleString()}</td>
+                    <td className="py-3 px-2 font-medium text-pottery-800">${order.total?.toLocaleString()}</td>
                     <td className="py-3 px-2">
                       <span className={`inline-block w-2 h-2 rounded-full mr-2 ${STATUS_COLORS[order.orderStatus] || 'bg-gray-400'}`} />
                       <span className="text-pottery-700">{STATUS_LABELS[order.orderStatus] || order.orderStatus}</span>

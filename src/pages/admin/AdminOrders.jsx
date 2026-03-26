@@ -154,7 +154,7 @@ export default function AdminOrders() {
                         <p className="text-xs text-pottery-500">{order.user?.email}</p>
                       </td>
                       <td className="py-3 px-4 text-pottery-700">{order.items?.length} items</td>
-                      <td className="py-3 px-4 font-semibold text-pottery-800">₹{order.total?.toLocaleString()}</td>
+                      <td className="py-3 px-4 font-semibold text-pottery-800">${order.total?.toLocaleString()}</td>
                       <td className="py-3 px-4"><StatusBadge status={order.orderStatus} /></td>
                       <td className="py-3 px-4">
                         <span className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -166,7 +166,7 @@ export default function AdminOrders() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-pottery-600">
-                        {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                        {new Date(order.createdAt).toLocaleDateString('en-US', {
                           day: 'numeric', month: 'short', year: '2-digit'
                         })}
                       </td>
@@ -241,20 +241,20 @@ export default function AdminOrders() {
                             <p className="text-pottery-500">x{item.quantity}</p>
                           </div>
                         </div>
-                        <p className="font-medium text-pottery-800">₹{(item.price * item.quantity).toLocaleString()}</p>
+                        <p className="font-medium text-pottery-800">${(item.price * item.quantity).toLocaleString()}</p>
                       </div>
                     ))}
                     <div className="pt-3 space-y-1 text-sm">
                       <div className="flex justify-between">
                         <span className="text-pottery-600">Subtotal</span>
-                        <span>₹{selectedOrder.subtotal?.toLocaleString()}</span>
+                        <span>${selectedOrder.subtotal?.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-pottery-600">Shipping</span>
-                        <span>{selectedOrder.shippingCost === 0 ? 'FREE' : `₹${selectedOrder.shippingCost}`}</span>
+                        <span>{selectedOrder.shippingCost === 0 ? 'FREE' : `$${selectedOrder.shippingCost}`}</span>
                       </div>
                       <div className="flex justify-between font-bold text-lg border-t border-pottery-200 pt-2">
-                        <span>Total</span><span>₹{selectedOrder.total?.toLocaleString()}</span>
+                        <span>Total</span><span>${selectedOrder.total?.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -269,7 +269,7 @@ export default function AdminOrders() {
                         <p className="font-medium">{selectedOrder.shippingAddress?.fullName}</p>
                         <p>{selectedOrder.shippingAddress?.addressLine1}</p>
                         {selectedOrder.shippingAddress?.addressLine2 && <p>{selectedOrder.shippingAddress.addressLine2}</p>}
-                        <p>{selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.state} - {selectedOrder.shippingAddress?.pincode}</p>
+                        <p>{selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.state}  {selectedOrder.shippingAddress?.zipCode}</p>
                         <p>{selectedOrder.shippingAddress?.phone}</p>
                       </div>
                     </div>
@@ -279,7 +279,7 @@ export default function AdminOrders() {
                         <p className="font-medium">{selectedOrder.billingAddress?.fullName}</p>
                         <p>{selectedOrder.billingAddress?.addressLine1}</p>
                         {selectedOrder.billingAddress?.addressLine2 && <p>{selectedOrder.billingAddress.addressLine2}</p>}
-                        <p>{selectedOrder.billingAddress?.city}, {selectedOrder.billingAddress?.state} - {selectedOrder.billingAddress?.pincode}</p>
+                        <p>{selectedOrder.billingAddress?.city}, {selectedOrder.billingAddress?.state}  {selectedOrder.billingAddress?.zipCode}</p>
                       </div>
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export default function AdminOrders() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <input type="text" className="input text-sm" placeholder="Tracking number"
                           value={trackingNumber} onChange={e => setTrackingNumber(e.target.value)} />
-                        <input type="text" className="input text-sm" placeholder="Carrier (e.g., Delhivery)"
+                        <input type="text" className="input text-sm" placeholder="Carrier (e.g., USPS, FedEx)"
                           value={shippingCarrier} onChange={e => setShippingCarrier(e.target.value)} />
                       </div>
                     )}
@@ -337,7 +337,7 @@ export default function AdminOrders() {
                                 {STATUS_CONFIG[entry.status]?.label || entry.status}
                               </p>
                               <p className="text-xs text-pottery-500">
-                                {new Date(entry.updatedAt).toLocaleDateString('en-IN', {
+                                {new Date(entry.updatedAt).toLocaleDateString('en-US', {
                                   day: 'numeric', month: 'short', year: 'numeric',
                                   hour: '2-digit', minute: '2-digit'
                                 })}

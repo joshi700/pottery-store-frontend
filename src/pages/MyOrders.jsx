@@ -84,7 +84,7 @@ export default function MyOrders() {
                 <div className="pb-4">
                   <p className="font-medium text-pottery-800 text-sm">{config.label}</p>
                   <p className="text-xs text-pottery-500">
-                    {new Date(entry.updatedAt).toLocaleDateString('en-IN', {
+                    {new Date(entry.updatedAt).toLocaleDateString('en-US', {
                       day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
                     })}
                   </p>
@@ -136,14 +136,14 @@ export default function MyOrders() {
                   <div>
                     <p className="text-sm text-pottery-500">Date</p>
                     <p className="text-pottery-800 text-sm">
-                      {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                      {new Date(order.createdAt).toLocaleDateString('en-US', {
                         day: 'numeric', month: 'short', year: 'numeric'
                       })}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-pottery-500">Total</p>
-                    <p className="font-semibold text-pottery-800">₹{order.total?.toLocaleString()}</p>
+                    <p className="font-semibold text-pottery-800">${order.total?.toLocaleString()}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -218,22 +218,22 @@ export default function MyOrders() {
                               {item.name} <span className="text-pottery-500">x{item.quantity}</span>
                             </span>
                             <span className="font-medium text-pottery-800">
-                              ₹{(item.price * item.quantity).toLocaleString()}
+                              ${(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
                         ))}
                         <div className="border-t border-pottery-200 pt-2 mt-2 space-y-1">
                           <div className="flex justify-between text-sm">
                             <span className="text-pottery-600">Subtotal</span>
-                            <span>₹{selectedOrder.subtotal?.toLocaleString()}</span>
+                            <span>${selectedOrder.subtotal?.toLocaleString()}</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-pottery-600">Shipping</span>
-                            <span>{selectedOrder.shippingCost === 0 ? 'FREE' : `₹${selectedOrder.shippingCost}`}</span>
+                            <span>{selectedOrder.shippingCost === 0 ? 'FREE' : `$${selectedOrder.shippingCost}`}</span>
                           </div>
                           <div className="flex justify-between font-semibold">
                             <span>Total</span>
-                            <span>₹{selectedOrder.total?.toLocaleString()}</span>
+                            <span>${selectedOrder.total?.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
@@ -250,7 +250,7 @@ export default function MyOrders() {
                         )}
                         <p>
                           {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.state} -{' '}
-                          {selectedOrder.shippingAddress?.pincode}
+                          {selectedOrder.shippingAddress?.zipCode}
                         </p>
                       </div>
 

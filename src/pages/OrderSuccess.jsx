@@ -107,7 +107,7 @@ export default function OrderSuccess() {
           <div className="text-left sm:text-right">
             <p className="text-sm text-pottery-500">Order Date</p>
             <p className="text-pottery-800 font-medium">
-              {new Date(order.createdAt).toLocaleDateString('en-IN', {
+              {new Date(order.createdAt).toLocaleDateString('en-US', {
                 day: 'numeric', month: 'long', year: 'numeric'
               })}
             </p>
@@ -129,7 +129,7 @@ export default function OrderSuccess() {
                 <p className="text-sm text-pottery-600">Qty: {item.quantity}</p>
               </div>
               <p className="font-semibold text-pottery-800">
-                ₹{(item.price * item.quantity).toLocaleString()}
+                ${(item.price * item.quantity).toLocaleString()}
               </p>
             </div>
           ))}
@@ -139,7 +139,7 @@ export default function OrderSuccess() {
         <div className="border-t border-pottery-200 pt-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-pottery-600">Subtotal</span>
-            <span className="text-pottery-800">₹{order.subtotal?.toLocaleString()}</span>
+            <span className="text-pottery-800">${order.subtotal?.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-pottery-600">Shipping</span>
@@ -149,7 +149,7 @@ export default function OrderSuccess() {
           </div>
           <div className="flex justify-between text-lg font-bold border-t border-pottery-200 pt-2">
             <span className="text-pottery-800">Total</span>
-            <span className="text-pottery-800">₹{order.total?.toLocaleString()}</span>
+            <span className="text-pottery-800">${order.total?.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@ export default function OrderSuccess() {
           <p>{order.shippingAddress?.phone}</p>
           <p>{order.shippingAddress?.addressLine1}</p>
           {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress.addressLine2}</p>}
-          <p>{order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.pincode}</p>
+          <p>{order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.zipCode}</p>
         </div>
       </div>
 
