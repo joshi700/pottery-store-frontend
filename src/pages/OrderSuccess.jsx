@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { ordersAPI } from '../utils/api';
+import { ordersAPI, paymentAPI } from '../utils/api';
 import { CheckCircle, Package, MapPin, ArrowRight, Loader2, XCircle } from 'lucide-react';
 
 export default function OrderSuccess() {
@@ -15,6 +15,7 @@ export default function OrderSuccess() {
       try {
         // Try orderId from URL params first, then from sessionStorage (hosted checkout redirect)
         let orderId = searchParams.get('orderId');
+        const resultIndicator = searchParams.get('resultIndicator');
 
         if (!orderId) {
           const pending = sessionStorage.getItem('pendingOrder');
@@ -29,6 +30,15 @@ export default function OrderSuccess() {
           setError('No order information found.');
           setLoading(false);
           return;
+        }
+
+        // If returning from Mastercard Hosted Checkout, verify payment first
+        if (resultIndicator) {
+          try {
+            await paymentAPI.verifyPayment({ orderId, resultIndicator });
+          } catch (verifyErr) {
+            console.error('Payment verification failed:', verifyErr);
+          }
         }
 
         const res = await ordersAPI.getById(orderId);
