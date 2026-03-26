@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -135,6 +135,12 @@ export default function Checkout() {
   const [saveShippingAddress, setSaveShippingAddress] = useState(false);
   const [saveBillingAddress, setSaveBillingAddress] = useState(false);
 
+  // Google Pay state
+  const [gpayReady, setGpayReady] = useState(false);
+  const [gpayConfig, setGpayConfig] = useState(null);
+  const paymentsClientRef = useRef(null);
+  const gpayButtonRef = useRef(null);
+
   const shippingCost = cartTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
   const orderTotal = cartTotal + shippingCost;
 
@@ -173,6 +179,66 @@ export default function Checkout() {
     };
 
     loadAddresses();
+  }, []);
+
+  // Initialize Google Pay
+  useEffect(() => {
+    const initGooglePay = async () => {
+      try {
+        // Fetch Google Pay config from backend
+        const configRes = await paymentAPI.getConfig();
+        const config = configRes.data.googlePay;
+        setGpayConfig(config);
+
+        // Wait for Google Pay SDK to load
+        if (!window.google?.payments?.api?.PaymentsClient) {
+          // SDK not loaded yet, retry after a delay
+          const retryInterval = setInterval(() => {
+            if (window.google?.payments?.api?.PaymentsClient) {
+              clearInterval(retryInterval);
+              setupGooglePay(config);
+            }
+          }, 500);
+          // Clean up after 10 seconds
+          setTimeout(() => clearInterval(retryInterval), 10000);
+          return;
+        }
+
+        setupGooglePay(config);
+      } catch (err) {
+        console.error('Failed to initialize Google Pay:', err);
+      }
+    };
+
+    const setupGooglePay = async (config) => {
+      const client = new window.google.payments.api.PaymentsClient({
+        environment: config.environment || 'TEST',
+      });
+      paymentsClientRef.current = client;
+
+      const isReadyToPayRequest = {
+        apiVersion: 2,
+        apiVersionMinor: 0,
+        allowedPaymentMethods: [{
+          type: 'CARD',
+          parameters: {
+            allowedAuthMethods: config.allowedAuthMethods || ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+            allowedCardNetworks: config.allowedCardNetworks || ['VISA', 'MASTERCARD', 'AMEX', 'DISCOVER'],
+          },
+        }],
+      };
+
+      try {
+        const response = await client.isReadyToPay(isReadyToPayRequest);
+        if (response.result) {
+          setGpayReady(true);
+        }
+      } catch (err) {
+        console.error('Google Pay isReadyToPay error:', err);
+      }
+    };
+
+    initGooglePay();
   }, []);
 
   const validateAddress = (address) => {
@@ -216,7 +282,7 @@ export default function Checkout() {
     setError('');
 
     try {
-      // Optionally save new addresses (don't fail checkout if this errors)
+      // Optionally save new addresses
       try {
         if (saveShippingAddress && useNewShipping) {
           await authAPI.addShippingAddress(shippingAddress);
@@ -244,62 +310,75 @@ export default function Checkout() {
         shippingCost,
       };
 
+      // Step 1: Create order in backend
       const response = await paymentAPI.createOrder({
         amount: orderTotal,
         orderData,
       });
 
-      const { order, sessionId, gatewayUrl, apiVersion, merchantName } = response.data;
+      const { order, googlePay: gpConfig } = response.data;
 
-      // Store pending order info for after payment return
-      sessionStorage.setItem('pendingOrder', JSON.stringify({
+      // Step 2: Launch Google Pay payment sheet
+      const paymentDataRequest = {
+        apiVersion: 2,
+        apiVersionMinor: 0,
+        allowedPaymentMethods: [{
+          type: 'CARD',
+          parameters: {
+            allowedAuthMethods: gpConfig?.allowedAuthMethods || gpayConfig?.allowedAuthMethods || ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+            allowedCardNetworks: gpConfig?.allowedCardNetworks || gpayConfig?.allowedCardNetworks || ['VISA', 'MASTERCARD', 'AMEX', 'DISCOVER'],
+          },
+          tokenizationSpecification: {
+            type: 'PAYMENT_GATEWAY',
+            parameters: {
+              gateway: gpConfig?.gateway || 'mpgs',
+              gatewayMerchantId: gpConfig?.gatewayMerchantId || gpayConfig?.gatewayMerchantId,
+            },
+          },
+        }],
+        merchantInfo: {
+          merchantId: 'BCR2DN4T7654321', // Google Pay test merchant ID
+          merchantName: gpConfig?.merchantName || 'Meenakshi Pottery',
+        },
+        transactionInfo: {
+          totalPriceStatus: 'FINAL',
+          totalPrice: orderTotal.toFixed(2),
+          currencyCode: 'USD',
+          countryCode: 'US',
+        },
+      };
+
+      const client = paymentsClientRef.current;
+      if (!client) {
+        throw new Error('Google Pay not initialized');
+      }
+
+      const paymentData = await client.loadPaymentData(paymentDataRequest);
+      console.log('Google Pay payment data received:', paymentData);
+
+      // Step 3: Send Google Pay token to backend for MPGS processing
+      const processResponse = await paymentAPI.processGooglePay({
         orderId: order.orderId,
-        orderNumber: order.orderNumber,
-      }));
+        paymentData,
+      });
 
-      // Remove any existing Mastercard checkout script
-      const existingScript = document.getElementById('mastercard-checkout-js');
-      if (existingScript) existingScript.remove();
-
-      // Load Mastercard Hosted Checkout script
-      const script = document.createElement('script');
-      script.src = `${gatewayUrl}/checkout/version/${apiVersion}/checkout.js`;
-      script.id = 'mastercard-checkout-js';
-      script.setAttribute('data-error', 'errorCallback');
-      script.setAttribute('data-cancel', `${window.location.origin}/checkout`);
-
-      script.onload = () => {
-        // Wait for the script to fully initialize, then configure and show payment page
-        setTimeout(() => {
-          if (window.Checkout) {
-            window.Checkout.configure({
-              session: { id: sessionId },
-              interaction: {
-                merchant: {
-                  name: merchantName || 'Meenakshi Pottery',
-                },
-              },
-            });
-            // Clear cart before redirect
-            clearCart();
-            // Show the hosted payment page (redirects to Mastercard)
-            window.Checkout.showPaymentPage();
-          } else {
-            setError('Failed to load payment gateway. Please try again.');
-            setLoading(false);
-          }
-        }, 500);
-      };
-
-      script.onerror = () => {
-        setError('Failed to load payment gateway script. Please try again.');
-        setLoading(false);
-      };
-
-      document.head.appendChild(script);
+      if (processResponse.data.success) {
+        // Payment successful — clear cart and navigate to success page
+        clearCart();
+        navigate(`/order-success?orderId=${order.orderId}&orderNumber=${order.orderNumber}`);
+      } else {
+        setError(processResponse.data.message || 'Payment processing failed. Please try again.');
+      }
     } catch (err) {
-      console.error('Order creation failed:', err);
-      setError(err.response?.data?.message || 'Failed to create order. Please try again.');
+      console.error('Order/payment failed:', err);
+
+      // Google Pay cancellation
+      if (err.statusCode === 'CANCELED') {
+        setError('Payment cancelled. You can try again.');
+      } else {
+        setError(err.response?.data?.message || err.message || 'Failed to process payment. Please try again.');
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -483,17 +562,46 @@ export default function Checkout() {
                 ))}
               </div>
 
+              {/* Payment Section */}
+              <div className="border-t border-pottery-200 pt-6 mb-6">
+                <h3 className="font-semibold text-pottery-800 mb-3">Payment Method</h3>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="26" viewBox="0 0 40 26">
+                    <rect width="40" height="26" rx="4" fill="#fff" stroke="#ddd"/>
+                    <text x="20" y="16" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#4285F4">G</text>
+                    <text x="20" y="16" textAnchor="middle" fontSize="8" fontWeight="bold">
+                      <tspan fill="#4285F4">G</tspan><tspan fill="#EA4335"> Pay</tspan>
+                    </text>
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-pottery-800">Google Pay</p>
+                    <p className="text-xs text-pottery-600">Powered by Mastercard Gateway</p>
+                  </div>
+                  {gpayReady && (
+                    <span className="ml-auto text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded">Ready</span>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-between mt-6">
                 <button onClick={() => setStep(billingSameAsShipping ? 1 : 2)}
                   className="btn btn-secondary flex items-center gap-2">
                   <ChevronLeft size={18} /> Edit Address
                 </button>
-                <button onClick={handlePlaceOrder} disabled={loading}
-                  className="btn btn-primary flex items-center gap-2 disabled:opacity-50">
+                <button onClick={handlePlaceOrder} disabled={loading || !gpayReady}
+                  className="btn btn-primary flex items-center gap-2 disabled:opacity-50"
+                  style={{ backgroundColor: loading ? undefined : '#000', borderColor: loading ? undefined : '#000' }}>
                   {loading ? (
                     <><Loader2 size={18} className="animate-spin" /> Processing...</>
+                  ) : !gpayReady ? (
+                    <><Loader2 size={18} className="animate-spin" /> Loading Google Pay...</>
                   ) : (
-                    <><CreditCard size={18} /> Pay ${orderTotal.toLocaleString()}</>
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/>
+                      </svg>
+                      Pay ${orderTotal.toLocaleString()}
+                    </>
                   )}
                 </button>
               </div>

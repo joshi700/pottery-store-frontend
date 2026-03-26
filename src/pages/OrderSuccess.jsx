@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { ordersAPI, paymentAPI } from '../utils/api';
+import { ordersAPI } from '../utils/api';
 import { CheckCircle, Package, MapPin, ArrowRight, Loader2, XCircle } from 'lucide-react';
 
 export default function OrderSuccess() {
@@ -13,32 +13,12 @@ export default function OrderSuccess() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        // Try orderId from URL params first, then from sessionStorage (hosted checkout redirect)
-        let orderId = searchParams.get('orderId');
-        const resultIndicator = searchParams.get('resultIndicator');
-
-        if (!orderId) {
-          const pending = sessionStorage.getItem('pendingOrder');
-          if (pending) {
-            const parsed = JSON.parse(pending);
-            orderId = parsed.orderId;
-            sessionStorage.removeItem('pendingOrder');
-          }
-        }
+        const orderId = searchParams.get('orderId');
 
         if (!orderId) {
           setError('No order information found.');
           setLoading(false);
           return;
-        }
-
-        // If returning from Mastercard Hosted Checkout, verify payment first
-        if (resultIndicator) {
-          try {
-            await paymentAPI.verifyPayment({ orderId, resultIndicator });
-          } catch (verifyErr) {
-            console.error('Payment verification failed:', verifyErr);
-          }
         }
 
         const res = await ordersAPI.getById(orderId);
@@ -144,7 +124,7 @@ export default function OrderSuccess() {
           <div className="flex justify-between text-sm">
             <span className="text-pottery-600">Shipping</span>
             <span className={order.shippingCost === 0 ? 'text-green-600 font-medium' : 'text-pottery-800'}>
-              {order.shippingCost === 0 ? 'FREE' : `₹${order.shippingCost}`}
+              {order.shippingCost === 0 ? 'FREE' : `$${order.shippingCost}`}
             </span>
           </div>
           <div className="flex justify-between text-lg font-bold border-t border-pottery-200 pt-2">
@@ -182,6 +162,7 @@ export default function OrderSuccess() {
             </p>
             <p className="text-sm text-pottery-600">
               Payment: <span className="capitalize">{order.paymentStatus}</span>
+              {isPaid && ' via Google Pay'}
             </p>
           </div>
         </div>
