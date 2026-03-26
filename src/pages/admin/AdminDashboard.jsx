@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ordersAPI, productsAPI } from '../../utils/api';
+import { adminOrdersAPI as ordersAPI, productsAPI } from '../../utils/api';
 import {
   Package, DollarSign, ShoppingCart, TrendingUp, Loader2,
   ArrowRight, Clock, CheckCircle, Truck, XCircle, BarChart3

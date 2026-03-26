@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ordersAPI } from '../../utils/api';
+import { adminOrdersAPI as ordersAPI } from '../../utils/api';
 import {
   Package, Loader2, Filter, ChevronLeft, ChevronRight,
   Clock, CheckCircle, Truck, XCircle, Eye, X, MapPin

@@ -102,8 +102,7 @@ export const AuthProvider = ({ children }) => {
     register,
     googleLogin,
     logout,
-    isAuthenticated: !!user,
-    isAdmin: user?.isAdmin || false
+    isAuthenticated: !!user
   };
 
   return (

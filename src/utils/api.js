@@ -70,7 +70,54 @@ export const ordersAPI = {
 // Payment API
 export const paymentAPI = {
   createOrder: (data) => api.post('/payment/create-order', data),
+  processGooglePay: (data) => api.post('/payment/process-googlepay', data),
+  getConfig: () => api.get('/payment/config'),
   verifyPayment: (data) => api.post('/payment/verify', data),
+};
+
+// Admin Auth API (separate from customer auth)
+// Uses its own token from localStorage('adminToken')
+const adminApi = axios.create({
+  baseURL: API_URL,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+adminApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('adminToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+adminApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/admin/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export const adminAuthAPI = {
+  login: (data) => adminApi.post('/admin/auth/login', data),
+  getMe: () => adminApi.get('/admin/auth/me'),
+};
+
+// Admin-scoped APIs (orders, products) using admin token
+export const adminOrdersAPI = {
+  getAll: (params) => adminApi.get('/orders', { params }),
+  getById: (id) => adminApi.get(`/orders/${id}`),
+  updateStatus: (id, data) => adminApi.put(`/orders/${id}/status`, data),
+  getStats: () => adminApi.get('/orders/stats/dashboard'),
+};
+
+export const adminProductsAPI = {
+  create: (data) => adminApi.post('/products', data),
+  update: (id, data) => adminApi.put(`/products/${id}`, data),
+  delete: (id) => adminApi.delete(`/products/${id}`),
 };
 
 export default api;

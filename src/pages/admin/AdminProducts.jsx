@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { productsAPI } from '../../utils/api';
+import { productsAPI, adminProductsAPI } from '../../utils/api';
 import {
   Plus, Edit3, Trash2, Loader2, Package, X, Save, Star, Search
 } from 'lucide-react';
@@ -106,9 +106,9 @@ export default function AdminProducts() {
       };
 
       if (editingProduct) {
-        await productsAPI.update(editingProduct._id, data);
+        await adminProductsAPI.update(editingProduct._id, data);
       } else {
-        await productsAPI.create(data);
+        await adminProductsAPI.create(data);
       }
 
       setShowForm(false);
@@ -122,7 +122,7 @@ export default function AdminProducts() {
 
   const handleDelete = async (productId) => {
     try {
-      await productsAPI.delete(productId);
+      await adminProductsAPI.delete(productId);
       setDeleteConfirm(null);
       await fetchProducts();
     } catch (err) {

@@ -2,10 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useAdminAuth } from '../context/AdminAuthContext';
 import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
+  const { isAdminAuthenticated } = useAdminAuth();
   const { cartCount, setIsCartOpen } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -40,7 +42,7 @@ export default function Navbar() {
             <Link to="/contact" className="text-pottery-800 hover:text-pottery-600 transition">
               Contact
             </Link>
-            {isAdmin && (
+            {isAdminAuthenticated && (
               <Link to="/admin" className="text-pottery-600 hover:text-pottery-700 font-semibold transition">
                 Admin
               </Link>
@@ -145,7 +147,7 @@ export default function Navbar() {
             >
               Contact
             </Link>
-            {isAdmin && (
+            {isAdminAuthenticated && (
               <Link
                 to="/admin"
                 className="block py-2 text-pottery-600 font-semibold"
