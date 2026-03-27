@@ -1,23 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
   const { isAdminAuthenticated } = useAdminAuth();
   const { cartCount, setIsCartOpen } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    setProfileMenuOpen(false);
-  };
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -63,48 +53,6 @@ export default function Navbar() {
                 </span>
               )}
             </button>
-
-            {/* User Menu */}
-            {isAuthenticated ? (
-              <div className="relative">
-                <button
-                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                  className="p-2 text-pottery-800 hover:text-pottery-600 transition"
-                >
-                  <User size={24} />
-                </button>
-                
-                {profileMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                    <div className="px-4 py-2 border-b border-pottery-100">
-                      <p className="text-sm font-semibold text-pottery-800">{user?.name}</p>
-                      <p className="text-xs text-pottery-600">{user?.email}</p>
-                    </div>
-                    <Link
-                      to="/my-orders"
-                      className="block px-4 py-2 text-sm text-pottery-800 hover:bg-pottery-50"
-                      onClick={() => setProfileMenuOpen(false)}
-                    >
-                      My Orders
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
-                    >
-                      <LogOut size={16} />
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className="hidden md:block px-4 py-2 bg-pottery-600 text-white rounded-lg hover:bg-pottery-700 transition"
-              >
-                Login
-              </Link>
-            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -154,15 +102,6 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Admin Dashboard
-              </Link>
-            )}
-            {!isAuthenticated && (
-              <Link
-                to="/login"
-                className="block py-2 text-pottery-600 font-semibold"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Login / Register
               </Link>
             )}
           </div>

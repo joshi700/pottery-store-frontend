@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { ordersAPI } from '../utils/api';
+import api from '../utils/api';
 import {
   CheckCircle, Package, MapPin, ArrowRight, Loader2, XCircle,
   Printer, CreditCard, Calendar, Hash
@@ -16,12 +16,13 @@ export default function OrderSuccess() {
     const fetchOrder = async () => {
       try {
         const orderId = searchParams.get('orderId');
-        if (!orderId) {
+        const orderNumber = searchParams.get('orderNumber');
+        if (!orderId || !orderNumber) {
           setError('No order information found.');
           setLoading(false);
           return;
         }
-        const res = await ordersAPI.getById(orderId);
+        const res = await api.get(`/orders/${orderId}?orderNumber=${orderNumber}`);
         setOrder(res.data.order);
       } catch (err) {
         console.error('Failed to fetch order:', err);
@@ -49,8 +50,8 @@ export default function OrderSuccess() {
         <h2 className="text-2xl font-display font-bold text-pottery-800 mb-2">
           {error || 'Order not found'}
         </h2>
-        <p className="text-pottery-600 mb-6">Please check your orders page for updates.</p>
-        <Link to="/my-orders" className="btn btn-primary">View My Orders</Link>
+        <p className="text-pottery-600 mb-6">Please contact support if you need help.</p>
+        <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
       </div>
     );
   }
@@ -237,10 +238,7 @@ export default function OrderSuccess() {
         >
           <Printer size={18} /> Print Receipt
         </button>
-        <Link to="/my-orders" className="btn btn-primary flex items-center justify-center gap-2 print:hidden">
-          <Package size={18} /> View My Orders
-        </Link>
-        <Link to="/shop" className="btn btn-outline flex items-center justify-center gap-2 print:hidden">
+        <Link to="/shop" className="btn btn-primary flex items-center justify-center gap-2 print:hidden">
           Continue Shopping <ArrowRight size={18} />
         </Link>
       </div>

@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import { paymentAPI, authAPI } from '../utils/api';
-import { MapPin, CreditCard, ChevronLeft, Plus, Check, Loader2, ShoppingBag } from 'lucide-react';
+import { paymentAPI } from '../utils/api';
+import { MapPin, CreditCard, ChevronLeft, Check, Loader2, ShoppingBag } from 'lucide-react';
 
 const EMPTY_ADDRESS = {
   fullName: '',
@@ -81,28 +80,6 @@ const AddressForm = ({ address, onChange }) => (
   </div>
 );
 
-const SavedAddressCard = ({ addr, selected, onSelect }) => (
-  <button onClick={onSelect}
-    className={`w-full text-left p-4 rounded-lg border-2 transition ${
-      selected ? 'border-pottery-600 bg-pottery-50' : 'border-pottery-200 hover:border-pottery-400'}`}>
-    <div className="flex items-start justify-between">
-      <div>
-        <p className="font-semibold text-pottery-800">{addr.fullName}</p>
-        <p className="text-sm text-pottery-600">{addr.phone}</p>
-        <p className="text-sm text-pottery-600 mt-1">
-          {addr.addressLine1}{addr.addressLine2 ? `, ${addr.addressLine2}` : ''}
-        </p>
-        <p className="text-sm text-pottery-600">{addr.city}, {addr.state} {addr.zipCode}</p>
-      </div>
-      {selected && (
-        <div className="bg-pottery-600 rounded-full p-1">
-          <Check size={14} className="text-white" />
-        </div>
-      )}
-    </div>
-  </button>
-);
-
 const AddressDisplay = ({ title, address }) => (
   <div className="bg-pottery-50 p-4 rounded-lg">
     <h4 className="font-semibold text-pottery-800 mb-2">{title}</h4>
@@ -117,7 +94,6 @@ const AddressDisplay = ({ title, address }) => (
 
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1); // 1: shipping, 2: billing, 3: review
@@ -128,12 +104,6 @@ export default function Checkout() {
   const [shippingAddress, setShippingAddress] = useState(EMPTY_ADDRESS);
   const [billingAddress, setBillingAddress] = useState(EMPTY_ADDRESS);
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
-  const [savedShippingAddresses, setSavedShippingAddresses] = useState([]);
-  const [savedBillingAddresses, setSavedBillingAddresses] = useState([]);
-  const [useNewShipping, setUseNewShipping] = useState(true);
-  const [useNewBilling, setUseNewBilling] = useState(true);
-  const [saveShippingAddress, setSaveShippingAddress] = useState(false);
-  const [saveBillingAddress, setSaveBillingAddress] = useState(false);
 
   // Google Pay state
   const [gpayReady, setGpayReady] = useState(false);
@@ -144,41 +114,11 @@ export default function Checkout() {
   const shippingCost = cartTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
   const orderTotal = cartTotal + shippingCost;
 
-  // Load saved addresses on mount
+  // Redirect to shop if cart is empty
   useEffect(() => {
     if (cart.length === 0) {
       navigate('/shop');
-      return;
     }
-
-    const loadAddresses = async () => {
-      try {
-        const res = await authAPI.getMe();
-        const userData = res.data.user;
-        if (userData.shippingAddresses?.length > 0) {
-          setSavedShippingAddresses(userData.shippingAddresses);
-          setUseNewShipping(false);
-          const defaultAddr = userData.shippingAddresses.find(a => a.isDefault) || userData.shippingAddresses[0];
-          setShippingAddress(defaultAddr);
-        } else {
-          setShippingAddress(prev => ({
-            ...prev,
-            fullName: user?.name || '',
-            phone: user?.phone || '',
-          }));
-        }
-        if (userData.billingAddresses?.length > 0) {
-          setSavedBillingAddresses(userData.billingAddresses);
-          setUseNewBilling(false);
-          const defaultAddr = userData.billingAddresses.find(a => a.isDefault) || userData.billingAddresses[0];
-          setBillingAddress(defaultAddr);
-        }
-      } catch (err) {
-        console.error('Failed to load addresses:', err);
-      }
-    };
-
-    loadAddresses();
   }, []);
 
   // Initialize Google Pay
@@ -282,18 +222,6 @@ export default function Checkout() {
     setError('');
 
     try {
-      // Optionally save new addresses
-      try {
-        if (saveShippingAddress && useNewShipping) {
-          await authAPI.addShippingAddress(shippingAddress);
-        }
-        if (saveBillingAddress && useNewBilling && !billingSameAsShipping) {
-          await authAPI.addBillingAddress(billingAddress);
-        }
-      } catch (addrErr) {
-        console.warn('Failed to save address:', addrErr);
-      }
-
       const finalBilling = billingSameAsShipping ? { ...shippingAddress } : billingAddress;
 
       const orderData = {
@@ -435,38 +363,7 @@ export default function Checkout() {
                 <h2 className="text-xl font-display font-bold text-pottery-800">Shipping Address</h2>
               </div>
 
-              {savedShippingAddresses.length > 0 && (
-                <div className="mb-6">
-                  <p className="text-sm font-medium text-pottery-700 mb-3">Saved Addresses</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {savedShippingAddresses.map((addr, i) => (
-                      <SavedAddressCard key={addr._id || i} addr={addr}
-                        selected={!useNewShipping && shippingAddress._id === addr._id}
-                        onSelect={() => { setUseNewShipping(false); setShippingAddress(addr); }} />
-                    ))}
-                  </div>
-                  <button onClick={() => {
-                    setUseNewShipping(true);
-                    setShippingAddress({ ...EMPTY_ADDRESS, fullName: user?.name || '', phone: user?.phone || '' });
-                  }}
-                    className={`mt-3 flex items-center gap-2 text-sm font-medium ${
-                      useNewShipping ? 'text-pottery-600' : 'text-pottery-500 hover:text-pottery-600'}`}>
-                    <Plus size={16} /> Add new address
-                  </button>
-                </div>
-              )}
-
-              {(useNewShipping || savedShippingAddresses.length === 0) && (
-                <>
-                  <AddressForm address={shippingAddress} onChange={setShippingAddress} />
-                  <label className="flex items-center gap-2 mt-4 cursor-pointer">
-                    <input type="checkbox" checked={saveShippingAddress}
-                      onChange={e => setSaveShippingAddress(e.target.checked)}
-                      className="rounded border-pottery-300 text-pottery-600 focus:ring-pottery-500" />
-                    <span className="text-sm text-pottery-700">Save this address for future orders</span>
-                  </label>
-                </>
-              )}
+              <AddressForm address={shippingAddress} onChange={setShippingAddress} />
 
               <div className="mt-6 pt-6 border-t border-pottery-200">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -496,35 +393,7 @@ export default function Checkout() {
                 <h2 className="text-xl font-display font-bold text-pottery-800">Billing Address</h2>
               </div>
 
-              {savedBillingAddresses.length > 0 && (
-                <div className="mb-6">
-                  <p className="text-sm font-medium text-pottery-700 mb-3">Saved Billing Addresses</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {savedBillingAddresses.map((addr, i) => (
-                      <SavedAddressCard key={addr._id || i} addr={addr}
-                        selected={!useNewBilling && billingAddress._id === addr._id}
-                        onSelect={() => { setUseNewBilling(false); setBillingAddress(addr); }} />
-                    ))}
-                  </div>
-                  <button onClick={() => { setUseNewBilling(true); setBillingAddress(EMPTY_ADDRESS); }}
-                    className={`mt-3 flex items-center gap-2 text-sm font-medium ${
-                      useNewBilling ? 'text-pottery-600' : 'text-pottery-500 hover:text-pottery-600'}`}>
-                    <Plus size={16} /> Add new address
-                  </button>
-                </div>
-              )}
-
-              {(useNewBilling || savedBillingAddresses.length === 0) && (
-                <>
-                  <AddressForm address={billingAddress} onChange={setBillingAddress} />
-                  <label className="flex items-center gap-2 mt-4 cursor-pointer">
-                    <input type="checkbox" checked={saveBillingAddress}
-                      onChange={e => setSaveBillingAddress(e.target.checked)}
-                      className="rounded border-pottery-300 text-pottery-600 focus:ring-pottery-500" />
-                    <span className="text-sm text-pottery-700">Save this billing address</span>
-                  </label>
-                </>
-              )}
+              <AddressForm address={billingAddress} onChange={setBillingAddress} />
 
               <div className="flex justify-between mt-6">
                 <button onClick={() => setStep(1)} className="btn btn-secondary flex items-center gap-2">
