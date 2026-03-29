@@ -87,6 +87,19 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="py-10 border-t border-pottery-200">
+        <div className="container-custom text-center">
+          <p className="text-pottery-600 mb-3 text-sm font-medium uppercase tracking-wide">Shop with confidence</p>
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-pottery-600">
+            <Link to="/return-policy" className="hover:text-pottery-800 underline">30-Day Return Policy</Link>
+            <span className="text-pottery-300">|</span>
+            <span>Secure Checkout</span>
+            <span className="text-pottery-300">|</span>
+            <Link to="/contact" className="hover:text-pottery-800 underline">Contact Us</Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
