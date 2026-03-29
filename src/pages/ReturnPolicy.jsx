@@ -53,8 +53,8 @@ export default function ReturnPolicy() {
           <ol className="list-decimal pl-6 space-y-2">
             <li>
               Email us at{' '}
-              <a href="mailto:returns@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-                returns@joshig.in
+              <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
+                gaurav@joshig.in
               </a>{' '}
               with your order number and reason for return.
             </li>
@@ -98,12 +98,12 @@ export default function ReturnPolicy() {
           </p>
           <ul className="mt-3 space-y-1">
             <li><strong>Email:</strong>{' '}
-              <a href="mailto:returns@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-                returns@joshig.in
+              <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
+                gaurav@joshig.in
               </a>
             </li>
-            <li><strong>Phone:</strong> +1 (512) 555-0178</li>
-            <li><strong>Address:</strong> 247 Artisan Way, Arts District, Austin, TX 78701, USA</li>
+            <li><strong>Phone:</strong> +91 8826230460</li>
+            <li><strong>Address:</strong> 104 Sapphire, Nyati Empire Society, Kharadi, Pune, Maharashtra, India 411014</li>
           </ul>
         </section>
 
