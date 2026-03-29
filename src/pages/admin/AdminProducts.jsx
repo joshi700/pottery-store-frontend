@@ -4,7 +4,7 @@ import {
   Plus, Edit3, Trash2, Loader2, Package, X, Save, Star, Search
 } from 'lucide-react';
 
-const CATEGORIES = ['bowls', 'plates', 'cups', 'vases', 'decorative', 'other'];
+const CATEGORIES = ['plates', 'cups', 'vases', 'jewelry', 'flowers', 'wall-art', 'planters', 'decorative', 'other'];
 
 const EMPTY_PRODUCT = {
   name: '',

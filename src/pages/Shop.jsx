@@ -29,7 +29,7 @@ export default function Shop() {
     }
   };
 
-  const categories = ['all', 'bowls', 'plates', 'cups', 'vases', 'decorative', 'other'];
+  const categories = ['all', 'plates', 'cups', 'vases', 'jewelry', 'flowers', 'wall-art', 'planters', 'decorative', 'other'];
 
   return (
     <div className="py-8">
