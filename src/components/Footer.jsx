@@ -27,8 +27,8 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Contact</h3>
             <ul className="space-y-2 text-sm text-pottery-300">
               <li>
-                <a href="mailto:gaurav@joshig.in" className="hover:text-white transition-colors">
-                  gaurav@joshig.in
+                <a href="mailto:gaurav@meenapottery.com" className="hover:text-white transition-colors">
+                  gaurav@meenapottery.com
                 </a>
               </li>
               <li>+91 8826230460</li>

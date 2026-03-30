@@ -225,7 +225,7 @@ export default function OrderSuccess() {
             Thank you for shopping with Meenakshi Pottery.
           </p>
           <p className="text-xs text-pottery-400 mt-1">
-            Questions? Contact us at support@joshig.in
+            Questions? Contact us at support@meenapottery.com
           </p>
         </div>
       </div>

@@ -56,8 +56,8 @@ export default function ShippingPolicy() {
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Damaged in Transit</h2>
           <p>
             If your item arrives damaged, please contact us at{' '}
-            <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-              gaurav@joshig.in
+            <a href="mailto:gaurav@meenapottery.com" className="text-pottery-600 underline hover:text-pottery-800">
+              gaurav@meenapottery.com
             </a>{' '}
             within <strong>7 days of delivery</strong> with photos of the damage. We will arrange a free replacement
             or full refund, including all shipping costs.
@@ -68,8 +68,8 @@ export default function ShippingPolicy() {
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Contact Us</h2>
           <ul className="space-y-1">
             <li><strong>Email:</strong>{' '}
-              <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-                gaurav@joshig.in
+              <a href="mailto:gaurav@meenapottery.com" className="text-pottery-600 underline hover:text-pottery-800">
+                gaurav@meenapottery.com
               </a>
             </li>
             <li><strong>Phone:</strong> +91 8826230460</li>

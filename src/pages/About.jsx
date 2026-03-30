@@ -38,7 +38,7 @@ export default function About() {
             <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Our Studio</h2>
             <ul className="space-y-1 text-pottery-700">
               <li><strong>Location:</strong> 104 Sapphire, Nyati Empire Society, Kharadi, Pune, Maharashtra, India 411014</li>
-              <li><strong>Email:</strong> gaurav@joshig.in</li>
+              <li><strong>Email:</strong> gaurav@meenapottery.com</li>
               <li><strong>Phone:</strong> +91 8826230460</li>
             </ul>
           </div>

@@ -14,7 +14,7 @@ export default function TermsConditions() {
 
       <div className="prose prose-pottery max-w-none space-y-8 text-pottery-700">
         <p className="text-lg text-pottery-600">
-          By accessing or purchasing from joshig.in, you agree to be bound by the following terms and conditions.
+          By accessing or purchasing from meenapottery.com, you agree to be bound by the following terms and conditions.
           Please read them carefully before placing an order.
         </p>
 
@@ -48,7 +48,7 @@ export default function TermsConditions() {
         <section>
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">4. Orders & Cancellations</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Orders can be cancelled within 24 hours of placement by contacting us at gaurav@joshig.in.</li>
+            <li>Orders can be cancelled within 24 hours of placement by contacting us at gaurav@meenapottery.com.</li>
             <li>Once an order has been shipped, it cannot be cancelled — please refer to our Return Policy.</li>
             <li>We reserve the right to cancel orders due to stock unavailability, payment issues, or suspected fraud.</li>
           </ul>
@@ -101,8 +101,8 @@ export default function TermsConditions() {
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Contact Us</h2>
           <ul className="space-y-1">
             <li><strong>Email:</strong>{' '}
-              <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-                gaurav@joshig.in
+              <a href="mailto:gaurav@meenapottery.com" className="text-pottery-600 underline hover:text-pottery-800">
+                gaurav@meenapottery.com
               </a>
             </li>
             <li><strong>Phone:</strong> +91 8826230460</li>

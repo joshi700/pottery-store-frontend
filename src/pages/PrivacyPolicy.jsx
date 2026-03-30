@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
 
       <div className="prose prose-pottery max-w-none space-y-8 text-pottery-700">
         <p className="text-lg text-pottery-600">
-          Meenakshi Pottery ("we", "us", or "our") operates joshig.in. This page describes how we collect,
+          Meenakshi Pottery ("we", "us", or "our") operates meenapottery.com. This page describes how we collect,
           use, and protect your personal information when you visit or make a purchase from our website.
         </p>
 
@@ -81,8 +81,8 @@ export default function PrivacyPolicy() {
           </ul>
           <p className="mt-3">
             To exercise any of these rights, contact us at{' '}
-            <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-              gaurav@joshig.in
+            <a href="mailto:gaurav@meenapottery.com" className="text-pottery-600 underline hover:text-pottery-800">
+              gaurav@meenapottery.com
             </a>.
           </p>
         </section>
@@ -91,8 +91,8 @@ export default function PrivacyPolicy() {
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Contact Us</h2>
           <ul className="space-y-1">
             <li><strong>Email:</strong>{' '}
-              <a href="mailto:gaurav@joshig.in" className="text-pottery-600 underline hover:text-pottery-800">
-                gaurav@joshig.in
+              <a href="mailto:gaurav@meenapottery.com" className="text-pottery-600 underline hover:text-pottery-800">
+                gaurav@meenapottery.com
               </a>
             </li>
             <li><strong>Phone:</strong> +91 8826230460</li>
