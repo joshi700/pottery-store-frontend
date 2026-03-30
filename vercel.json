@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/.well-known/ucp", "destination": "https://api.meenapottery.com/.well-known/ucp" },
+    { "source": "/api/ucp/(.*)", "destination": "https://api.meenapottery.com/api/ucp/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
