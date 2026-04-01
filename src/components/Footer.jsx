@@ -38,8 +38,12 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-pottery-700 mt-10 pt-6 text-center text-sm text-pottery-400">
-          &copy; {new Date().getFullYear()} Meenakshi Pottery. All rights reserved.
+        <div className="border-t border-pottery-700 mt-10 pt-6 text-center text-sm text-pottery-400 space-y-2">
+          <p>&copy; {new Date().getFullYear()} Meenakshi Pottery. All rights reserved.</p>
+          <p>Operated by Gaurav Joshi · Pune, Maharashtra, India</p>
+          <p className="text-xs text-pottery-500">
+            Meenakshi Pottery is an independent brand and is not affiliated with any other similarly named businesses.
+          </p>
         </div>
       </div>
     </footer>

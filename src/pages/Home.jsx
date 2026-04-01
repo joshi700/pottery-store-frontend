@@ -88,13 +88,45 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-10 border-t border-pottery-200">
+      <section className="py-16">
+        <div className="container-custom">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-display font-bold text-pottery-800 mb-4">
+              What Our Customers Say
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-pottery-50 p-6 rounded-lg">
+              <p className="text-pottery-700 italic mb-4">
+                "Beautiful handcrafted pieces, exactly as shown in the photos. The packaging was excellent — arrived in perfect condition."
+              </p>
+              <p className="text-pottery-800 font-semibold text-sm">— Sarah M., New York</p>
+            </div>
+            <div className="bg-pottery-50 p-6 rounded-lg">
+              <p className="text-pottery-700 italic mb-4">
+                "I ordered the ceramic vase as a gift and it was absolutely stunning. You can tell each piece is truly made by hand."
+              </p>
+              <p className="text-pottery-800 font-semibold text-sm">— James R., California</p>
+            </div>
+            <div className="bg-pottery-50 p-6 rounded-lg">
+              <p className="text-pottery-700 italic mb-4">
+                "Great quality, fast shipping, and wonderful customer support. Will definitely be ordering again!"
+              </p>
+              <p className="text-pottery-800 font-semibold text-sm">— Priya K., Texas</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 bg-pottery-50 border-t border-pottery-200">
         <div className="container-custom text-center">
-          <p className="text-pottery-600 mb-3 text-sm font-medium uppercase tracking-wide">Shop with confidence</p>
+          <p className="text-pottery-700 mb-3 text-sm font-semibold uppercase tracking-wide">Shop with confidence</p>
           <div className="flex flex-wrap justify-center gap-6 text-sm text-pottery-600">
             <Link to="/return-policy" className="hover:text-pottery-800 underline">30-Day Return Policy</Link>
             <span className="text-pottery-300">|</span>
-            <span>Secure Checkout</span>
+            <Link to="/shipping-policy" className="hover:text-pottery-800 underline">Free Shipping on $50+</Link>
+            <span className="text-pottery-300">|</span>
+            <span>Secure Checkout (SSL)</span>
             <span className="text-pottery-300">|</span>
             <Link to="/contact" className="hover:text-pottery-800 underline">Contact Us</Link>
           </div>

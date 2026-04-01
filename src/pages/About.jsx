@@ -15,8 +15,8 @@ export default function About() {
           <p className="text-pottery-700 leading-relaxed mb-6">
             Meenakshi Pottery was born out of a deep love for clay and craftsmanship. What began as a personal pursuit
             in a small home studio in Kharadi, Pune, has grown into a thriving business creating unique handcrafted
-            ceramic pieces for homes across India. Each item we make carries the warmth of human hands and the soul
-            of the artisan who made it.
+            ceramic pieces for homes across India and the United States. Each item we make carries the warmth of human
+            hands and the soul of the artisan who made it.
           </p>
 
           <h2 className="text-2xl font-display font-bold text-pottery-800 mb-4 mt-8">Our Process</h2>
@@ -35,13 +35,20 @@ export default function About() {
           </p>
 
           <div className="bg-pottery-50 p-6 rounded-lg mt-8">
-            <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Our Studio</h2>
-            <ul className="space-y-1 text-pottery-700">
-              <li><strong>Location:</strong> 104 Sapphire, Nyati Empire Society, Kharadi, Pune, Maharashtra, India 411014</li>
+            <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Business Information</h2>
+            <ul className="space-y-2 text-pottery-700">
+              <li><strong>Business Name:</strong> Meenakshi Pottery</li>
+              <li><strong>Operated by:</strong> Gaurav Joshi</li>
+              <li><strong>Address:</strong> 104 Sapphire, Nyati Empire Society, Kharadi, Pune, Maharashtra, India 411014</li>
               <li><strong>Email:</strong> gaurav@meenapottery.com</li>
               <li><strong>Phone:</strong> +91 8826230460</li>
+              <li><strong>Website:</strong> meenapottery.com</li>
             </ul>
           </div>
+
+          <p className="text-sm text-pottery-500 mt-6">
+            Meenakshi Pottery is an independent ceramics brand and is not affiliated with any other similarly named businesses.
+          </p>
         </div>
       </div>
     </div>

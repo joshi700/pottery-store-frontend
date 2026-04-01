@@ -108,7 +108,7 @@ export default function ReturnPolicy() {
         </section>
 
         <p className="text-sm text-pottery-500 pt-4 border-t border-pottery-200">
-          This policy was last updated on March 26, 2026.
+          This policy was last updated on April 1, 2026.
         </p>
       </div>
     </div>

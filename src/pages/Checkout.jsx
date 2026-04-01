@@ -514,6 +514,16 @@ export default function Checkout() {
               </div>
             </div>
           </div>
+          <div className="mt-4 p-4 bg-pottery-50 rounded-lg text-center text-xs text-pottery-500 space-y-1">
+            <p className="font-semibold text-pottery-600">Secure Checkout — SSL Encrypted</p>
+            <p>
+              <a href="/return-policy" className="underline hover:text-pottery-700">30-Day Returns</a>
+              {' · '}
+              <a href="/shipping-policy" className="underline hover:text-pottery-700">Shipping Policy</a>
+              {' · '}
+              <a href="/privacy-policy" className="underline hover:text-pottery-700">Privacy Policy</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
