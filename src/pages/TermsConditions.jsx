@@ -39,7 +39,7 @@ export default function TermsConditions() {
         <section>
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">3. Pricing & Payment</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>All prices are listed in Indian Rupees (INR) and are inclusive of applicable taxes unless stated otherwise.</li>
+            <li>All prices are listed in US Dollars (USD) and are inclusive of applicable taxes unless stated otherwise.</li>
             <li>We accept payments via the methods listed at checkout. Payment must be completed before an order is processed.</li>
             <li>We reserve the right to correct pricing errors and will notify you before processing a corrected order.</li>
           </ul>

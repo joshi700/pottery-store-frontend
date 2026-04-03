@@ -28,8 +28,8 @@ const US_STATES = [
   'District of Columbia',
 ];
 
-const SHIPPING_COST = 9.99;
-const FREE_SHIPPING_THRESHOLD = 150;
+const SHIPPING_COST = 5.99;
+const FREE_SHIPPING_THRESHOLD = 50;
 
 const AddressForm = ({ address, onChange }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
