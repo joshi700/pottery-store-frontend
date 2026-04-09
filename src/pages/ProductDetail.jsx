@@ -81,6 +81,10 @@ export default function ProductDetail() {
       "weight": product.dimensions.weight
     }),
     "category": product.category || "Handcrafted Pottery",
+    "countryOfOrigin": {
+      "@type": "Country",
+      "name": "India"
+    },
     "offers": {
       "@type": "Offer",
       "url": `https://meenapottery.com/product/${product._id}`,
@@ -182,6 +186,9 @@ export default function ProductDetail() {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2 text-green-700">
+                  <span className="font-semibold">Ships from:</span> India
+                </div>
+                <div className="flex items-center gap-2 text-green-700">
                   <span className="font-semibold">Dispatch:</span> Within 1–2 business days
                 </div>
                 <div className="flex items-center gap-2 text-green-700">
@@ -191,6 +198,9 @@ export default function ProductDetail() {
                   <span className="font-semibold">Shipping:</span> Free on orders above $50
                 </div>
               </div>
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded mt-3 px-3 py-2">
+                <span className="font-semibold">Note:</span> US import duties and taxes may apply upon delivery and are the buyer's responsibility.
+              </p>
             </div>
 
             {product.story && (
