@@ -55,8 +55,86 @@ export default function ProductDetail() {
     );
   }
 
+  const productSchema = product ? {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "image": product.images,
+    "url": `https://meenapottery.com/product/${product._id}`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Meenakshi Pottery"
+    },
+    "manufacturer": {
+      "@type": "Organization",
+      "name": "Meenakshi Pottery",
+      "url": "https://meenapottery.com"
+    },
+    ...(product.materials && product.materials.length > 0 && { "material": product.materials.join(", ") }),
+    ...(product.dimensions && {
+      "width": product.dimensions.width,
+      "height": product.dimensions.height,
+      "weight": product.dimensions.weight
+    }),
+    "category": product.category || "Handcrafted Pottery",
+    "offers": {
+      "@type": "Offer",
+      "url": `https://meenapottery.com/product/${product._id}`,
+      "priceCurrency": "USD",
+      "price": product.price,
+      "availability": product.isAvailable ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "Meenakshi Pottery"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": product.price >= 50 ? "0" : "5.99",
+          "currency": "USD"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "US"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 2, "unitCode": "DAY" },
+          "transitTime": { "@type": "QuantitativeValue", "minValue": 7, "maxValue": 14, "unitCode": "DAY" }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 30,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
+    }
+  } : null;
+
+  const breadcrumbSchema = product ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://meenapottery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Shop", "item": "https://meenapottery.com/shop" },
+      { "@type": "ListItem", "position": 3, "name": product.name, "item": `https://meenapottery.com/product/${product._id}` }
+    ]
+  } : null;
+
   return (
     <div className="py-8">
+      {productSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      )}
+      {breadcrumbSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      )}
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>

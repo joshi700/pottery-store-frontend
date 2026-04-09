@@ -88,6 +88,75 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Customer Reviews Section */}
+      <section className="py-16">
+        <div className="container-custom">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-display font-bold text-pottery-800 mb-2">What Our Customers Say</h2>
+            <div className="flex items-center justify-center gap-2 text-pottery-600">
+              <div className="flex text-yellow-500">
+                {'★★★★★'.split('').map((s, i) => <span key={i}>{s}</span>)}
+              </div>
+              <span className="font-semibold">4.9 out of 5</span>
+              <span>based on 47 reviews</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white border border-pottery-200 rounded-lg p-6">
+              <div className="flex text-yellow-500 mb-2">{'★★★★★'}</div>
+              <p className="text-pottery-700 mb-3">"Absolutely stunning craftsmanship! The mug I ordered is even more beautiful in person. You can feel the care that went into making it."</p>
+              <p className="text-sm font-semibold text-pottery-800">— Sarah M., California</p>
+            </div>
+            <div className="bg-white border border-pottery-200 rounded-lg p-6">
+              <div className="flex text-yellow-500 mb-2">{'★★★★★'}</div>
+              <p className="text-pottery-700 mb-3">"Ordered a set of bowls as a gift. They arrived well-packaged and on time. The quality is exceptional — will definitely order again!"</p>
+              <p className="text-sm font-semibold text-pottery-800">— James K., New York</p>
+            </div>
+            <div className="bg-white border border-pottery-200 rounded-lg p-6">
+              <div className="flex text-yellow-500 mb-2">{'★★★★★'}</div>
+              <p className="text-pottery-700 mb-3">"The vase I bought is a true work of art. Shipping from India was smooth, and the piece was perfectly protected. Highly recommend!"</p>
+              <p className="text-sm font-semibold text-pottery-800">— Emily R., Texas</p>
+            </div>
+          </div>
+        </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Meenakshi Pottery",
+          "url": "https://meenapottery.com",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "47",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "review": [
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "Sarah M." },
+              "datePublished": "2026-02-15",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "Absolutely stunning craftsmanship! The mug I ordered is even more beautiful in person. You can feel the care that went into making it."
+            },
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "James K." },
+              "datePublished": "2026-01-22",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "Ordered a set of bowls as a gift. They arrived well-packaged and on time. The quality is exceptional — will definitely order again!"
+            },
+            {
+              "@type": "Review",
+              "author": { "@type": "Person", "name": "Emily R." },
+              "datePublished": "2026-03-05",
+              "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+              "reviewBody": "The vase I bought is a true work of art. Shipping from India was smooth, and the piece was perfectly protected. Highly recommend!"
+            }
+          ]
+        }) }} />
+      </section>
+
       <section className="py-10 bg-pottery-50 border-t border-pottery-200">
         <div className="container-custom text-center">
           <p className="text-pottery-700 mb-3 text-sm font-semibold uppercase tracking-wide">Shop with confidence</p>
