@@ -10,6 +10,10 @@ export default function Shop() {
   const [availableOnly, setAvailableOnly] = useState(true);
 
   useEffect(() => {
+    document.title = 'Shop Our Collection - Meenakshi Pottery';
+  }, []);
+
+  useEffect(() => {
     fetchProducts();
   }, [category, availableOnly]);
 

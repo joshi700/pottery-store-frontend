@@ -18,6 +18,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminProducts from './pages/admin/AdminProducts';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/admin/products" element={
             <AdminProtectedRoute><AdminProducts /></AdminProtectedRoute>
           } />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

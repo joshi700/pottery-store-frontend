@@ -20,6 +20,9 @@ export default function ProductDetail() {
     try {
       const response = await productsAPI.getById(id);
       setProduct(response.data.product);
+      if (response.data.product) {
+        document.title = `${response.data.product.name} - Meenakshi Pottery`;
+      }
     } catch (error) {
       console.error('Error fetching product:', error);
     } finally {
@@ -112,7 +115,7 @@ export default function ProductDetail() {
         "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
         "merchantReturnDays": 30,
         "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
+        "returnFees": "https://schema.org/ReturnShippingFees"
       }
     }
   } : null;

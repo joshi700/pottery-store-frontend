@@ -4,6 +4,8 @@ import { useCart } from '../context/CartContext';
 import { paymentAPI } from '../utils/api';
 import { MapPin, CreditCard, ChevronLeft, Check, Loader2, ShoppingBag } from 'lucide-react';
 
+const PAGE_TITLE = 'Checkout - Meenakshi Pottery';
+
 const EMPTY_ADDRESS = {
   fullName: '',
   phone: '',
@@ -114,8 +116,9 @@ export default function Checkout() {
   const shippingCost = cartTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
   const orderTotal = cartTotal + shippingCost;
 
-  // Redirect to shop if cart is empty
+  // Set page title and redirect to shop if cart is empty
   useEffect(() => {
+    document.title = PAGE_TITLE;
     if (cart.length === 0) {
       navigate('/shop');
     }

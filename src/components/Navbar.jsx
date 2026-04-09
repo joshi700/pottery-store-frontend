@@ -15,7 +15,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="text-2xl font-display font-bold text-pottery-700">
-            Pottery
+            Meenakshi Pottery
           </Link>
 
           {/* Desktop Navigation */}

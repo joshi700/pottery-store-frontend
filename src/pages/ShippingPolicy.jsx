@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function ShippingPolicy() {
+  useEffect(() => {
+    document.title = 'Shipping Policy - Meenakshi Pottery';
+  }, []);
+
   return (
     <div className="container-custom py-12 max-w-4xl mx-auto">
       <Link to="/shop" className="inline-flex items-center gap-2 text-pottery-600 hover:text-pottery-800 mb-8">
@@ -66,9 +71,9 @@ export default function ShippingPolicy() {
         <section>
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Customs & Duties</h2>
           <p>
-            International shipments may be subject to import duties and taxes, which are the responsibility of the
-            buyer. Meenakshi Pottery is not responsible for any customs delays or additional charges imposed by
-            your country's customs authority.
+            Since our pottery is handcrafted in India and shipped to the United States, shipments may be subject
+            to import duties and taxes, which are the responsibility of the buyer. Meenakshi Pottery is not
+            responsible for any customs delays or additional charges imposed by U.S. customs authorities.
           </p>
         </section>
 

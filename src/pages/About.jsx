@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+
 export default function About() {
+  useEffect(() => {
+    document.title = 'About Us - Meenakshi Pottery';
+  }, []);
+
   return (
     <div className="py-12">
       <div className="container-custom max-w-4xl">

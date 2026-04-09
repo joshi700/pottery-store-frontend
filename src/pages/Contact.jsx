@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+
 export default function Contact() {
+  useEffect(() => {
+    document.title = 'Contact Us - Meenakshi Pottery';
+  }, []);
+
   return (
     <div className="py-12">
       <div className="container-custom max-w-2xl">
@@ -28,12 +34,15 @@ export default function Contact() {
           </div>
 
           <div className="bg-pottery-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-pottery-800 mb-4">Business Hours (IST)</h3>
+            <h3 className="font-semibold text-pottery-800 mb-4">Business Hours</h3>
             <div className="space-y-1 text-pottery-700">
-              <p>Monday – Friday: 10:00 AM – 6:00 PM</p>
-              <p>Saturday: 11:00 AM – 4:00 PM</p>
+              <p>Monday – Friday: 10:00 AM – 6:00 PM IST (12:30 AM – 8:30 AM ET)</p>
+              <p>Saturday: 11:00 AM – 4:00 PM IST (1:30 AM – 6:30 AM ET)</p>
               <p>Sunday: Closed</p>
             </div>
+            <p className="text-sm text-pottery-500 mt-3">
+              For US customers, email is the fastest way to reach us. We respond within 24–48 hours on business days.
+            </p>
           </div>
 
           <div className="bg-pottery-50 p-6 rounded-lg">

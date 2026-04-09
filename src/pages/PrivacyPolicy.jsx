@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    document.title = 'Privacy Policy - Meenakshi Pottery';
+  }, []);
+
   return (
     <div className="container-custom py-12 max-w-4xl mx-auto">
       <Link to="/shop" className="inline-flex items-center gap-2 text-pottery-600 hover:text-pottery-800 mb-8">

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8B5E3C"/>
+      <stop offset="100%" stop-color="#6B3A2A"/>
+    </linearGradient>
+  </defs>
+  <!-- Pottery vase body -->
+  <path d="M20 54 C20 54 16 46 16 36 C16 28 20 24 22 22 C22 20 21 18 21 18 L43 18 C43 18 42 20 42 22 C44 24 48 28 48 36 C48 46 44 54 44 54 Z" fill="url(#g)" stroke="#5A3420" stroke-width="1"/>
+  <!-- Vase rim -->
+  <ellipse cx="32" cy="18" rx="11" ry="3" fill="#A0714F" stroke="#5A3420" stroke-width="1"/>
+  <!-- Vase base -->
+  <ellipse cx="32" cy="54" rx="12" ry="3" fill="#7A4A30" stroke="#5A3420" stroke-width="1"/>
+  <!-- Decorative band -->
+  <path d="M18 36 Q32 32 46 36" stroke="#D4A574" stroke-width="2" fill="none"/>
+  <path d="M17 40 Q32 36 47 40" stroke="#D4A574" stroke-width="2" fill="none"/>
+  <!-- M letter for Meenakshi -->
+  <text x="32" y="12" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#8B5E3C">M</text>
+</svg>
