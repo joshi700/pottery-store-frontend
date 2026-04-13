@@ -9,8 +9,8 @@ export default function ShippingPolicy() {
 
   return (
     <div className="container-custom py-12 max-w-4xl mx-auto">
-      <Link to="/shop" className="inline-flex items-center gap-2 text-pottery-600 hover:text-pottery-800 mb-8">
-        <ArrowLeft size={18} /> Back to Shop
+      <Link to="/" className="inline-flex items-center gap-2 text-pottery-600 hover:text-pottery-800 mb-8">
+        <ArrowLeft size={18} /> Back to Home
       </Link>
 
       <h1 className="text-3xl md:text-4xl font-display font-bold text-pottery-800 mb-8">
@@ -35,18 +35,21 @@ export default function ShippingPolicy() {
         <section>
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Shipping to the United States</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Standard Delivery: <strong>7–14 business days</strong></li>
-            <li>Expedited Delivery: <strong>4–7 business days</strong> (where available)</li>
+            <li>Standard Delivery: <strong>3–6 weeks</strong></li>
+            <li>Expedited Delivery: <strong>10–20 business days</strong> (where available)</li>
             <li>Free standard shipping on all orders above <strong>$50</strong></li>
             <li>Flat rate shipping of <strong>$5.99</strong> for orders under $50</li>
           </ul>
+          <p className="mt-3 text-sm text-pottery-600">
+            Delivery timelines do not include potential customs clearance delays, which are outside our control.
+          </p>
         </section>
 
         <section>
           <h2 className="text-xl font-display font-bold text-pottery-800 mb-3">Shipping Partners</h2>
           <p>
-            We ship through trusted international carriers including <strong>DHL</strong>, <strong>FedEx</strong>,
-            and <strong>USPS</strong>. The carrier will be assigned based on your location and order size.
+            We ship through trusted international carriers including <strong>DHL</strong> and <strong>FedEx</strong>.
+            The carrier will be assigned based on your location and order size.
           </p>
         </section>
 
@@ -104,7 +107,7 @@ export default function ShippingPolicy() {
         </section>
 
         <p className="text-sm text-pottery-500 pt-4 border-t border-pottery-200">
-          This policy was last updated on April 1, 2026.
+          This policy was last updated on April 13, 2026.
         </p>
       </div>
     </div>
