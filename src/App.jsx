@@ -4,7 +4,6 @@ import Cart from './components/Cart';
 import Footer from './components/Footer';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import Home from './pages/Home';
-import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
@@ -28,7 +27,6 @@ function App() {
       <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

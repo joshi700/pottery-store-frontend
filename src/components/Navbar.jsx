@@ -23,9 +23,6 @@ export default function Navbar() {
             <Link to="/" className="text-pottery-800 hover:text-pottery-600 transition">
               Home
             </Link>
-            <Link to="/shop" className="text-pottery-800 hover:text-pottery-600 transition">
-              Shop
-            </Link>
             <Link to="/about" className="text-pottery-800 hover:text-pottery-600 transition">
               About
             </Link>
@@ -73,13 +70,6 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
-            </Link>
-            <Link
-              to="/shop"
-              className="block py-2 text-pottery-800 hover:text-pottery-600"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Shop
             </Link>
             <Link
               to="/about"
