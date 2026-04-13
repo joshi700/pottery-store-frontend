@@ -1,31 +1,39 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { productsAPI } from '../utils/api';
 import ProductCard from '../components/ProductCard';
+import { Filter } from 'lucide-react';
 
 export default function Home() {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState('');
+  const [availableOnly, setAvailableOnly] = useState(true);
 
   useEffect(() => {
     document.title = 'Meenakshi Pottery - Handcrafted Ceramics | Shop Handmade Pottery Online';
   }, []);
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        const response = await productsAPI.getAll({ featured: 'true', available: 'true' });
-        setFeaturedProducts(response.data.products.slice(0, 4));
-      } catch (error) {
-        console.error('Error fetching featured products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchProducts();
+  }, [category, availableOnly]);
 
-    fetchFeaturedProducts();
-  }, []);
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const params = {};
+      if (category) params.category = category;
+      if (availableOnly) params.available = 'true';
+      const response = await productsAPI.getAll(params);
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const categories = ['all', 'plates', 'cups', 'vases', 'jewelry', 'flowers', 'wall-art', 'planters', 'decorative', 'other'];
 
   return (
     <div>
@@ -34,42 +42,60 @@ export default function Home() {
           <h1 className="text-5xl md:text-6xl font-display font-bold text-pottery-800 mb-6">
             Handcrafted Pottery
           </h1>
-          <p className="text-xl text-pottery-700 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-pottery-700 max-w-2xl mx-auto">
             Discover unique, handmade ceramic pieces crafted with love and attention to detail. Each piece tells a story.
           </p>
-          <Link to="/shop" className="btn btn-primary inline-flex items-center space-x-2">
-            <span>Shop Collection</span>
-            <ArrowRight size={20} />
-          </Link>
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-8">
         <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-display font-bold text-pottery-800 mb-4">
-              Featured Pieces
-            </h2>
-            <p className="text-pottery-600">
-              Handpicked pieces from our latest collection
-            </p>
+          <div className="flex flex-col md:flex-row gap-4 mb-8">
+            <div className="flex items-center gap-2">
+              <Filter size={20} className="text-pottery-600" />
+              <span className="font-semibold">Filter:</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setCategory(cat === 'all' ? '' : cat)}
+                  className={`px-4 py-2 rounded-lg capitalize transition ${
+                    (cat === 'all' && !category) || category === cat
+                      ? 'bg-pottery-600 text-white'
+                      : 'bg-pottery-100 text-pottery-800 hover:bg-pottery-200'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <label className="flex items-center gap-2 ml-auto">
+              <input
+                type="checkbox"
+                checked={availableOnly}
+                onChange={(e) => setAvailableOnly(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span>Available only</span>
+            </label>
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-12">
+            <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pottery-600"></div>
             </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-xl text-pottery-600">No products found</p>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.map(product => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map(product => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
           )}
-
-          <div className="text-center mt-12">
-            <Link to="/shop" className="btn btn-outline">View All Products</Link>
-          </div>
         </div>
       </section>
 
