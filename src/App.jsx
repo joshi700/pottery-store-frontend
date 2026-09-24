@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
+import ChatWidget from './components/ChatWidget';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
@@ -50,6 +51,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
