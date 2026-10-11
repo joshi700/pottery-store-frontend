@@ -19,6 +19,20 @@ const SUGGESTIONS = [
   "What's your return policy?",
 ];
 
+// Random id per browser tab, so a conversation's turns are grouped in our traces
+function chatSessionId() {
+  try {
+    let id = sessionStorage.getItem('chatSessionId');
+    if (!id) {
+      id = crypto.randomUUID();
+      sessionStorage.setItem('chatSessionId', id);
+    }
+    return id;
+  } catch {
+    return undefined;
+  }
+}
+
 function loadHistory() {
   try {
     const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
@@ -121,6 +135,7 @@ export default function ChatWidget() {
         messages: next.filter(m => m.role === 'user' || m.role === 'assistant').map(({ role, content }) => ({ role, content })),
         cart: cart.map(item => ({ product_id: item._id, quantity: item.quantity })),
         page: location.pathname,
+        session_id: chatSessionId(),
       });
       applyActions(data.actions);
       setMessages(prev => {
