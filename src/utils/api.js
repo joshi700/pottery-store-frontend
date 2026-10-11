@@ -70,6 +70,11 @@ export const paymentAPI = {
   verifyPayment: (data) => api.post('/payment/verify', data),
 };
 
+// AI shopping assistant
+export const chatAPI = {
+  send: (data) => api.post('/chat', data, { timeout: 60000 }),
+};
+
 // Admin Auth API (separate from customer auth)
 // Uses its own token from localStorage('adminToken')
 const adminApi = axios.create({
